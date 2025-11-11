@@ -1,0 +1,78 @@
+﻿--Student ID
+--Student Name
+
+-- *********แบบฝึกหัด Basic Query #1 ***************
+--1. แสดงข้อมูลสินค้า 10 รายการแรก
+select TOP 10 * From Products
+
+--2. จงแสดงข้อมูล รหัสพนักงาน ชื่อ นามสกุล ของพนักงานทุกคน
+select EmployeeID, FirstName, LastName 
+From Employees
+
+--3. แสดงรหัสพนักงาน ชื่อและนามสกุลต่อกัน อายุ ของพนักงานแต่ละคน
+Select  EmployeeID, (FirstName + SPACE (3) + LastName),
+		 YEAR(GETDATE()) - YEAR(birthdate) AS Age
+From Employees
+
+/*4. แสดงข้อมูลรหัสสินค้า ชื่อสินค้า ราคาต่อหน่วย จำนวนคงเหลือ รหัสประเภทสินค้า
+จัดเรียงข้อมูลตามรหัสประเภทสินค้า จากน้อยไปหามาก และจำนวนคงเหลือจากมากไปหาน้อย */
+Select ProductID, ProductName, UnitPrice, UnitsInStock, CategoryID
+From Products
+Order by CategoryID ASC, UnitsInStock DESC
+
+--5. แสดงจำนวนรายการสินค้าที่จัดอยู่ในประเภทสินค้ารหัส 1
+Select COUNT(*) AS CountProducts
+From Products
+Where CategoryID = 1
+
+--6. แสดงจำนวนลูกค้าที่อยู่ในประเทศสหรัฐอเมริกา
+Select COUNT(*) As NumCustomer
+From Customers
+Where Country = 'USA'
+
+--7. แสดงจำนวนใบสั่งซื้อที่จัดส่งไปยังประเทศฝรั่งเศส ในปี 1997
+Select *
+From Orders
+where ShipCountry = 'france' AND YEAR(ShippedDate) = '1997'
+
+--8. แสดงราคาต่อหน่วยของสินค้าที่แพงสุด และถูกที่สุด
+Select MAX(UnitPrice) AS MAX_Price, MIN(UnitPrice) AS MIN_Price
+From Products
+
+--แสดงข้อมูลสินค้าที่มีราคาต่อหน่วยแพงที่สุด
+Select * 
+From Products
+where UnitPrice = (Select MAX(UnitPrice) From Products)
+
+--9. จงแสดงอายุของพนักงานที่มากสุดและอายุน้อยสุด
+Select MAX(YEAR(GETDATE()) - YEAR(Birthdate)) As Max_age
+Select MIN(YEAR(GETDATE()) - YEAR(Birthdate)) As Min_age
+From Employees
+
+--10. แสดงรหัสสินค้า ราคาต่อหน่วย จำนวนที่ซื้อ ราคารวม ของรายการสั่งซื้อที่อยู่ในใบสั่งซื้อหมายเลข10248
+Select ProductID, UnitPrice, Quantity, (UnitPrice * Quantity) AS SumPrice
+From [Order Details]
+Where OrderID = 10248
+
+--11. แสดงยอดสั่งซื้อรวมของใบสั่งซื้อหมายเลข 10248
+Select  Sum(UnitPrice * Quantity) AS TotalPrice
+from [Order Details]
+where OrderID = 10248
+
+--12. แสดงอายุเฉลี่ยของพนักงาน
+Select AVG(YEAR(GETDATE()) - YEAR(Birthdate)) AS Average_age
+from Employees
+
+--13. แสดงรหัสประเภทสินค้าและจำนวนรายการสินค้าในแต่ละประเภท
+Select CategoryID, COUNT (ProductID) As NumProducts
+From Products
+Group By CategoryID
+
+/*14. แสดงรหัสประเภทสินค้าและจำนวนรายการสินค้าในแต่ละประเภท 
+เฉพาะประเภทสินค้าที่มีรายการสินค้าอยู่ในประเภทนั้น 10 รายการขึ้นไป */
+
+
+--15. แสดงชื่อประเทศและจำนวนลูกค้าที่อยู่ในแต่ละประเทศ เฉพาะประเทศที่มีลูกค้าไม่ถึง 5 ราย
+
+/*16. แสดงรหัสใบสั่งซื้อและยอดสั่งซื้อรวมในแต่ละใบสั่งซื้อ เฉพาะใบสั่งซื้อที่มียอดสั่งซื้อรวมเกิน $10000
+จัดเรียงข้อมูลตามยอดสั่งซื้อรวมจากมากไปหาน้อย */
